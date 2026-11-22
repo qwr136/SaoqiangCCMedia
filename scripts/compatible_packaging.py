@@ -329,7 +329,10 @@ def _audit(packages, commands, env):
                         'dpkg-deb': r'backend version ([0-9]+(?:\.[0-9]+)+)'}
             match = re.search(patterns[command], proc.stdout, re.M)
             if not match or _compare(match.group(1), data['version'].split('_')[0]) != 0:
-                raise ValueError('binary version differs from installed core receipt: ' + command)
+                raise ValueError('binary version differs from installed core receipt: ' + command +
+                                 '; expected=' + data['version'] + '; parsed=' +
+                                 (match.group(1) if match else '<no match>') +
+                                 '; path=' + data['path'] + '; output=' + proc.stdout[-6000:])
             reported_version = match.group(1)
             version_source = 'binary-and-installed-core-receipt'
         loaded = re.findall(r'^dyld\[[0-9]+\]:[^\n]*?(/[^\n]+)', proc.stdout, re.M)
