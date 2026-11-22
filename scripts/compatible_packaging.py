@@ -326,7 +326,7 @@ def _audit(packages, commands, env):
         if command != 'ldid':
             patterns = {'make': r'^GNU Make ([0-9]+(?:\.[0-9]+)+)',
                         'xz': r'^xz \(XZ Utils\) ([0-9]+(?:\.[0-9]+)+)',
-                        'dpkg-deb': r'backend version ([0-9]+(?:\.[0-9]+)+)'}
+                        'dpkg-deb': r'^(?:Debian .+ backend version|dpkg-deb version) ([0-9]+(?:\.[0-9]+)+)\b'}
             match = re.search(patterns[command], proc.stdout, re.M)
             if not match or _compare(match.group(1), data['version'].split('_')[0]) != 0:
                 raise ValueError('binary version differs from installed core receipt: ' + command +

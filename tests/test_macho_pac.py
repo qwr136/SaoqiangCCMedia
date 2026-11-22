@@ -113,10 +113,10 @@ def make_fixups(pointer_format, *, auth=True, key=2, addr_div=1,
     return bytes(result), raw_isa
 
 
-def make_signature(unsigned, sigoff):
+def make_signature(unsigned, sigoff, version=0x20000):
     identifier = b"fixture.arm64e\0"
     hash_size = 32
-    header_size = 44
+    header_size = {0x20000:44,0x20100:48,0x20200:52,0x20300:64,0x20400:88,0x20500:96,0x20600:108}[version]
     ident_offset = header_size
     hash_offset = ident_offset + len(identifier)
     page_size = 4096
@@ -126,7 +126,7 @@ def make_signature(unsigned, sigoff):
     directory = bytearray(directory_size)
     struct.pack_into(">9I", directory, 0,
                      macho_pac.CODEDIRECTORY, directory_size,
-                     0x20000, 0x2, hash_offset, ident_offset,
+                     version, 0x2, hash_offset, ident_offset,
                      0, page_count, sigoff)
     struct.pack_into(">4B", directory, 36, hash_size, 2, 0, 12)
     directory[ident_offset:ident_offset + len(identifier)] = identifier
@@ -210,6 +210,14 @@ def fixture(*, pointer_format=12, auth=True, key=2, addr_div=1,
 
 
 class MachOPACTests(unittest.TestCase):
+    def test_real_code_directory_header_versions(self):
+        unsigned=bytes(4096)
+        for version in (0x20000,0x20100,0x20200,0x20300,0x20400,0x20500,0x20600):
+            with self.subTest(version=hex(version)):
+                sig=make_signature(unsigned,4096,version)
+                checked=macho_pac._check_signature(unsigned+sig,(4096,len(sig)))
+                self.assertEqual(checked['page_hashes_verified'],1)
+
     def test_authenticated_minimal_arm64e_passes_and_reports_contract(self):
         result = macho_pac.inspect_macho(fixture())
         self.assertEqual(result["architecture"], "arm64e")
