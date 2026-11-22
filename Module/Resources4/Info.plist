@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh_CN</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>3.1415926</string>
+	<key>CFBundleVersion</key>
+	<string>3.1415926</string>
+	<key>MinimumOSVersion</key>
+	<string>15.0</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>iPhoneOS</string>
+	</array>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>CFBundleName</key>
+	<string>SaoqiangCCMedia4</string>
+	<key>CFBundleExecutable</key>
+	<string>SaoqiangCCMedia4</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.saoqiang.ccmedia.module4</string>
+	<key>CFBundleDisplayName</key>
+	<string>骚强媒体 4</string>
+	<key>NSPrincipalClass</key>
+	<string>SQCCMMediaModule4</string>
+	<key>CCSGetModuleSizeAtRuntime</key>
+	<true/>
+	<key>CCSModuleSize</key>
+	<dict>
+		<key>Portrait</key>
+		<dict>
+			<key>Width</key>
+			<integer>2</integer>
+			<key>Height</key>
+			<integer>2</integer>
+		</dict>
+		<key>Landscape</key>
+		<dict>
+			<key>Width</key>
+			<integer>2</integer>
+			<key>Height</key>
+			<integer>2</integer>
+		</dict>
+	</dict>
+</dict>
+</plist>

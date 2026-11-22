@@ -1,0 +1,7 @@
+SaoqiangCCMedia 3.1415926
+Settings list icon is a separate standard 29pt asset: ListIcon.png 29x29, @2x 58x58, @3x 87x87. Header Icon.png unchanged.
+Control, bundle versions and Preferences visible version updated to 3.1415926.
+Seven LLVM19 native arm64e targets compiled without warnings; all 215 SHA256 signature pages verified. Playback changes: clear suspended state on reappearance, ignore stale close-completion after reopening, restore interactive cancellation, preserve playback during full-screen presentation. Each presentation seeks to zero with a token to discard old completion handlers. A per-module watchdog attempts seek recovery and at most two player rebuilds per presentation. No physical-device rapid-gesture or multi-decoder stress test performed. All 21 DEB files byte-identical to signed stage.
+SDK folder named 16.5 contains actual SDK16.4; minimum iOS15. RootHide iphoneos-arm64e.
+No on-device size/alignment validation. Previous runtime fixes remain unverified on device.
+DEB SHA256: e45061c8e517f2093bc948aeb32d9b44cbc68703146efdf76628f990ec5d9b67

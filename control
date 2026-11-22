@@ -1,0 +1,9 @@
+Package: com.saoqiang.ccmedia
+Name: 控制中心视频模块
+Version: 3.1415926
+Architecture: iphoneos-arm64e
+Depends: com.opa334.ccsupport, preferenceloader, firmware (>= 15.0)
+Description: 控制中心视频模块
+Maintainer: Saoqiang
+Author: Saoqiang
+Section: Control Center (Modules)
