@@ -11,6 +11,11 @@ class SQCCMPackagingVersionTests(unittest.TestCase):
         stdout='dyld[12]: /usr/lib/libSystem.B.dylib\n'+version_line+'\n'
         with patch.object(cp._HELPERS,'macho_files',return_value=[]),patch.object(cp,'_run',return_value=subprocess.CompletedProcess([],0,stdout=stdout)):
             return cp._audit(packages,commands,{})
+    def test_system_interpreter_only_exact_paths(self):
+        for path in ('/bin/bash','/bin/sh','/usr/bin/perl','/usr/lib/libSystem.B.dylib'):
+            self.assertTrue(cp._system_runtime_image(path))
+        for path in ('/tmp/bash','/bin/bash.dylib','/bin/../tmp/bash','/opt/homebrew/lib/unknown.dylib'):
+            self.assertFalse(cp._system_runtime_image(path))
     def test_native_darwin_dpkg_banner(self):
         r=self.audit('dpkg-deb version 1.23.12 (darwin-arm64)')
         self.assertEqual(r['runtime_smoke']['dpkg-deb']['version'],'1.23.12')

@@ -252,6 +252,12 @@ def _system_path(path):
     return '..' not in Path(path).parts and path.startswith(('/usr/lib/', '/System/Library/'))
 
 
+def _system_runtime_image(path):
+    # DYLD_PRINT_LIBRARIES also reports the main executable of wrapper children.
+    # Limit executable exceptions to exact sealed-system interpreter paths.
+    return _system_path(path) or path in ('/bin/bash', '/bin/sh', '/usr/bin/perl')
+
+
 def _dependencies(path, env, kegs, allowed):
     output = _run(['/usr/bin/otool', '-L', path], env).stdout
     names = [line.strip().split(' (compatibility version', 1)[0]
@@ -342,7 +348,7 @@ def _audit(packages, commands, env):
         allowed = _closure(data['package'], packages) | {data['package']}
         for entry in loaded:
             entry = entry.strip()
-            if _system_path(entry):
+            if _system_runtime_image(entry):
                 actual.append({'resolved': entry, 'system': True})
                 continue
             owner, real = _owned(Path(entry), kegs)
