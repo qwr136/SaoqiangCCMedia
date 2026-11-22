@@ -26,6 +26,12 @@ def require_strong_roothide(dependencies):
     require([cmd for cmd,name in dependencies if name==target]==[0xc],
             'Missing unique strong RootHide dependency')
 
+def resource_equal(name, actual, source):
+    if actual is None:return False
+    if name.endswith('.plist'):
+        return plistlib.loads(actual)==plistlib.loads(source)
+    return actual==source
+
 def verify(deb,project,version):
     control,_=archive(deb,True);require(set(control)=={'control'},'Unexpected maintainer scripts/control members')
     fields=dict(line.split(': ',1) for line in control['control'].decode().splitlines() if ': ' in line)
@@ -53,7 +59,7 @@ def verify(deb,project,version):
         # inspect_macho proves CFString PAC/signature; independently inspect platform/dependencies.
         import struct
         raw=data[path];ncmds=struct.unpack_from('<I',raw,16)[0];off=32;deps=[];dep_commands=[];build=[]
-        require(struct.unpack_from('<I',raw,12)[0]==8,'Expected MH_BUNDLE')
+        require(struct.unpack_from('<I',raw,12)[0]==6,'Expected Theos MH_DYLIB bundle payload')
         for _ in range(ncmds):
             cmd,size=struct.unpack_from('<II',raw,off)
             if cmd in (0xc,0x80000018,0x8000001f,0x80000023):
@@ -65,7 +71,7 @@ def verify(deb,project,version):
         require('/usr/lib/libSystem.B.dylib' in deps,'Missing libSystem')
         for dep in deps:require(dep.startswith(('/System/Library/','/usr/lib/','@loader_path/.jbroot/usr/lib/')) and '/var/jb/' not in dep,'Unresolved dependency '+dep)
     for name,src in resources.items():
-        expected.add(name);require(data.get(name)==src.read_bytes(),'Resource changed: '+name)
+        expected.add(name);require(resource_equal(name,data.get(name),src.read_bytes()),'Resource changed: '+name)
     require(set(data)==expected,'Unexpected package layout: '+repr(sorted(set(data)^expected)))
     entry=plistlib.loads(data[loader])['entry'];require(entry['detail']=='SQCCMPreferencesController' and entry['bundle']=='SaoqiangCCMediaPrefs','Loader mismatch')
     return {'status':'passed','version':version,'sha256':sha(deb.read_bytes()),'size':deb.stat().st_size,'control':fields,'binaries':binaries,'files':{n:{'sha256':sha(v),'size':len(v)} for n,v in sorted(data.items())},'device_verified':False}

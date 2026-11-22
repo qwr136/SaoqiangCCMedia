@@ -4,6 +4,15 @@ from verify_deb import require_strong_roothide
 P=Path(__file__).resolve().parents[1]
 s=importlib.util.spec_from_file_location('normalize',P/'scripts/normalize_package.py');normalize=importlib.util.module_from_spec(s);s.loader.exec_module(normalize)
 class SQCCMPackageTests(unittest.TestCase):
+    def test_plist_encoding_only_does_not_change_resource(self):
+        import plistlib
+        from verify_deb import resource_equal
+        obj={'entry':{'bundle':'SaoqiangCCMediaPrefs','detail':'SQCCMPreferencesController'}}
+        xml=plistlib.dumps(obj);binary=plistlib.dumps(obj,fmt=plistlib.FMT_BINARY)
+        self.assertTrue(resource_equal('Loader.plist',binary,xml))
+        self.assertFalse(resource_equal('Loader.plist',plistlib.dumps({'entry':{}}),xml))
+        self.assertFalse(resource_equal('Icon.png',b'changed',b'original'))
+
     def test_require_strong_roothide(self):
         target='@loader_path/.jbroot/usr/lib/libroothide.dylib'
         require_strong_roothide([(0xc,target)])
