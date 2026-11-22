@@ -1,0 +1,152 @@
+{
+  "archive": "SaoqiangCCMedia-3.1415926-source.zip",
+  "sha256": "75515952b9d8b834302b1f023137b1df4f992b83052e7eb5bdd11ee410ee250c",
+  "source_commit": "not supplied; archive identity only",
+  "files": {
+    "Makefile": {
+      "sha256": "877b1c60efa4a43186f271ef128a0f33e3eb8e2884780b284aa78732e92d2f17",
+      "size": 278,
+      "git_blob": "485f4ca3049d3f6a08d41eea8f3933b688bf87f7"
+    },
+    "VALIDATION.txt": {
+      "sha256": "6c94af91a50f6bdb98971874fce125361b2a2a3a968d37fd74a7c4e9b0a40e88",
+      "size": 1075,
+      "git_blob": "cfa76acf8716174cd88f530f025fae608c384a8f"
+    },
+    "build.sh": {
+      "sha256": "5046640a9729b117d7fc5c372d2dc0afefd9fa4c473253dea6b2ae102596646d",
+      "size": 509,
+      "git_blob": "77677eb6db53f2214cb042c45241e1910c7d9af7"
+    },
+    "README.md": {
+      "sha256": "8e99934f7a10b8bb15d09a7b3112bfcf715bbab290deb3ff3c30423d2c12ccf6",
+      "size": 2534,
+      "git_blob": "1f3106576b711e63854745fca8689b1748905827"
+    },
+    "Build.mk": {
+      "sha256": "e2b5723a46b579eb2d81242c426b94876349e982b5b66d1fda6e8deec4c66ff0",
+      "size": 299,
+      "git_blob": "bb1846a15f94b7099cfdd4ebd495b137d52e5548"
+    },
+    "control": {
+      "sha256": "9b3987e68c6935af4a3284ee9595f250b82cd50a3314a229a43e7f0d522c330b",
+      "size": 288,
+      "git_blob": "fc8e0638a29082d79098ee8e9de5a5080aa81a29"
+    },
+    "Shared/SQCCMVideoSource.h": {
+      "sha256": "2653706e3088b90a2498ef60af99b7513be1e74bef53ffef0f96496739508b44",
+      "size": 3818,
+      "git_blob": "7a8c1b1ccb8230b1664384e70c71a89748d1b610"
+    },
+    "Shared/SQCCMLayoutPolicy.h": {
+      "sha256": "ab6cdfef093375dd0e12ef1e8932d14bf8586b7d4b0d589cae8aafc725912244",
+      "size": 498,
+      "git_blob": "d3e5626d063fa9126635827b464a7708ee2c766e"
+    },
+    "Shared/SQCCMStorage.h": {
+      "sha256": "0e784ef9476e6a7f33ce5b8c47a0828fdc96efe3d59f6b3225c3269c917f149d",
+      "size": 5286,
+      "git_blob": "83997e6b7b63fe1d8ab21e035904ee31ae40a03f"
+    },
+    "scripts/update-module.py": {
+      "sha256": "ac689627539622dd7527b8843a9c040151f39676930c980dcdfe814cc02af0df",
+      "size": 8222,
+      "git_blob": "d38d9d5900004edff6c99a3c23385a92fbdfe60b"
+    },
+    "scripts/build-native.py": {
+      "sha256": "94f5f5d588bea24e45950623935c1ffb22c157ac7c4b055e1b00c3b1ed0a1857",
+      "size": 18403,
+      "git_blob": "a8129bb275971f9e932a3caa6baeb21ae9fd8f30"
+    },
+    "Module/Makefile": {
+      "sha256": "d5ceaa03b840c94a2bb4493272372a0b2a44a3a7fcd3a79c1c3a3744fc4b226c",
+      "size": 1077,
+      "git_blob": "8e24f3ddccaeff8b65081495684c413431f2aabf"
+    },
+    "Module/SQCCMModule.m": {
+      "sha256": "51268ecf0caf4e8fb956d7ea25c6d1d47b1b00ef3a0cd063e2efde1b489ebf04",
+      "size": 26841,
+      "git_blob": "e344e9e38208e57c168ec5a970be5baa1763897d"
+    },
+    "Preferences/SQCCMPreferences.m": {
+      "sha256": "2b303ac2a1f6c5b1df79c767fbda6633993022f9594663dbba726d1be4200fa5",
+      "size": 32910,
+      "git_blob": "2b49da686e535b48b9f5dfb6bfdeb0bede7a0d10"
+    },
+    "Preferences/Makefile": {
+      "sha256": "39bd1c881f786edabaeee320fcce6913850832a918288013b5f50cf3baae3efb",
+      "size": 614,
+      "git_blob": "71cb471ab19f407ca227370bcf60d8c2799e7418"
+    },
+    "layout/Library/PreferenceLoader/Preferences/SaoqiangCCMedia.plist": {
+      "sha256": "b919a7e9d3fcce55e4b1f2c88787214149d504271af30fc8d0e74185a0fe1119",
+      "size": 542,
+      "git_blob": "b155d42d0496fa3bf050fc3a49dc67ab7692ad1c"
+    },
+    "layout/Library/PreferenceLoader/Preferences/SaoqiangCCMedia.png": {
+      "sha256": "7cacf41d3c81b05073de51f66695c9664b45e7cdcc3b91acea5fe2eab5ca22d1",
+      "size": 223458,
+      "git_blob": "c6781616a026cb9bdb26b0bc213290f737073416"
+    },
+    "Module/Resources6/Info.plist": {
+      "sha256": "7e4ad87f132b862b9cef0400151c5e493cfa52551b2071bf6bd077028501cda2",
+      "size": 1407,
+      "git_blob": "1549b47f9c3efe8cf1caa248face78fa45ddc351"
+    },
+    "Module/Resources/Info.plist": {
+      "sha256": "2b8ab495cd9a4718551c13d16b210ad8eac2db16c3c1405e63804396ae854d4d",
+      "size": 1404,
+      "git_blob": "4f29906025a43e3e7549391353d2b213276c5108"
+    },
+    "Module/Resources2/Info.plist": {
+      "sha256": "a8e808e9b955776c6c294c45696ac255ccf0dc53693d9342e4952b30fe80e950",
+      "size": 1407,
+      "git_blob": "bf398b500aa8520501e89008205fee107ef142e0"
+    },
+    "Module/Resources5/Info.plist": {
+      "sha256": "95a579c2f18f9143448d88aad035891b91980fa5a32b920a006ab8087db43968",
+      "size": 1407,
+      "git_blob": "09e226e5429757d45b48e87b3cf6d01dffc313b5"
+    },
+    "Module/Resources4/Info.plist": {
+      "sha256": "62303b6d14581d693cffe97a8e7aa22099f8ee85de7a56cb38434af499c3ea80",
+      "size": 1407,
+      "git_blob": "4c1c038ebc67bcb403e2c400f1f625fc2a721a53"
+    },
+    "Module/Resources3/Info.plist": {
+      "sha256": "a85c398302442abf19ef2ffe568a47f5919d9e3bd4f890c8638ef89f1c49d11b",
+      "size": 1407,
+      "git_blob": "0d29998398d89de6393147adeb9eb750e7ad633a"
+    },
+    "Preferences/Resources/ListIcon.png": {
+      "sha256": "8635f40d8049ed87385ef993d8545d7825479924ab9d9177460730200af3cb54",
+      "size": 2575,
+      "git_blob": "084eaec8b8dcef1f0560025677e010ffb4625c52"
+    },
+    "Preferences/Resources/Icon.png": {
+      "sha256": "7cacf41d3c81b05073de51f66695c9664b45e7cdcc3b91acea5fe2eab5ca22d1",
+      "size": 223458,
+      "git_blob": "c6781616a026cb9bdb26b0bc213290f737073416"
+    },
+    "Preferences/Resources/Root.plist": {
+      "sha256": "5446d9354f259adacfc0a1bd84435ac8da2bc75487dc80c0968c3411e11bb5ca",
+      "size": 8865,
+      "git_blob": "f1ad2dd7b9523290305f8efb1d94483260b342f5"
+    },
+    "Preferences/Resources/ListIcon@2x.png": {
+      "sha256": "7330dd0f7a0c2b3bc3b6f99ac9fefdf4222cb436ab1bc16d637cb9f2915004b2",
+      "size": 8974,
+      "git_blob": "4d3ce17f9ffc4b6655972eecb07a32deb42ab24a"
+    },
+    "Preferences/Resources/Info.plist": {
+      "sha256": "4d044c6a40f68b9331ff261b3ba22d140d0b64092239762d3cea7a695056a45c",
+      "size": 1143,
+      "git_blob": "5cd5065d7e57f75664cca62c28d24522cba8c216"
+    },
+    "Preferences/Resources/ListIcon@3x.png": {
+      "sha256": "a202681c9c02e7ee3bc5162e5c7af1f2915cc64fc73ab3e515b2aef53301ee4b",
+      "size": 18594,
+      "git_blob": "c8618a827ff2db6fc634d67df629ba6256b4bd9b"
+    }
+  }
+}

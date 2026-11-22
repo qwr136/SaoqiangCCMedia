@@ -1,0 +1,10 @@
+.theos/
+packages/
+reports/
+artifacts/
+delivery/
+__pycache__/
+*.pyc
+.DS_Store
+tests/report.txt
+tests/report.json

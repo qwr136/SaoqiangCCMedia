@@ -1,0 +1,98 @@
+name: Build SaoqiangCCMedia
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: saoqiang-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  HOMEBREW_NO_AUTO_UPDATE: 1
+  HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
+  PYTHONDONTWRITEBYTECODE: 1
+  TOOLCHAIN_ROOT: /tmp/xiaofei-toolchain
+  THEOS: /tmp/xiaofei-toolchain/theos
+  THEOS_COMMIT: cfba89a53a05b4a1b822121158acc3669c20602f
+  SDK_COMMIT: 0222fd5413cf4b9af096f37b4621afa2688572f7
+  SDK_VERSION: '16.5'
+jobs:
+  test:
+    name: Source and rejection tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.13'
+          check-latest: false
+      - name: Static lock and regression tests
+        run: |
+          python3 scripts/toolchain.py static
+          python3 tests/run_tests.py -v
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: source-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            tests/report.txt
+            tests/report.json
+          if-no-files-found: error
+  build:
+    name: Apple arm64e build and actual package verification
+    needs: test
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.13'
+          check-latest: false
+      - name: Select installed compatible Apple Xcode
+        id: toolchain_host
+        run: python3 scripts/toolchain.py select-xcode --github-env
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: ${{ env.TOOLCHAIN_ROOT }}
+          key: saoqiang-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.toolchain_host.outputs.cache_key }}-${{ hashFiles('toolchain-lock.json') }}
+      - name: Prepare pinned toolchain
+        run: python3 scripts/toolchain.py prepare
+      - name: Verify actual toolchain
+        run: python3 scripts/toolchain.py verify --output reports/toolchain-verification.json
+      - name: Build original seven bundles and validate every signed ISA
+        run: |
+          set -euo pipefail
+          sh build.sh roothide 2>&1 | tee reports/build.log
+      - name: Run actual production panel source with UIKit test host
+        run: python3 tests/ui/run_panel_tests.py --output reports/uikit
+      - name: Bind package to this source and run
+        run: |
+          python3 scripts/toolchain.py receipt --output reports/build-receipt.json
+          git archive --format=zip --output=reports/SaoqiangCCMedia-source.zip HEAD
+          python3 scripts/finalize_receipt.py
+      - name: Upload verified deliverables
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: saoqiang-roothide-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            packages/*.deb
+            reports/build-receipt.json
+            reports/package-verification.json
+            reports/delivery-receipt.json
+            reports/SaoqiangCCMedia-source.zip
+            reports/uikit/result.json
+          if-no-files-found: error
+      - name: Upload failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: reports/
+          if-no-files-found: error

@@ -1,0 +1,24 @@
+{
+  "name": "SaoqiangCCMedia",
+  "class_prefix": "SQCCM",
+  "display_name": "控制中心视频模块",
+  "package": "com.saoqiang.ccmedia",
+  "original_author": "Saoqiang",
+  "repair_author": "Xiaofei",
+  "target_type": "deb",
+  "scheme": "roothide",
+  "architecture": "arm64e",
+  "minimum_ios": "15.0",
+  "sdk_version": "16.5",
+  "github_actions": true,
+  "template_version": "1.5.1",
+  "toolchain_lock": "toolchain-lock.json",
+  "upstream_version": "3.1415926",
+  "package_version": "3.1415926-2",
+  "targets": [
+    "com.apple.Preferences",
+    "com.apple.springboard"
+  ],
+  "identity_policy": "preserve-existing-package-and-preferences",
+  "template_usage": "Existing six-bundle source project; generated 1.5.1 scaffold used only for immutable toolchain and CI. No replacement of source or configuration."
+}

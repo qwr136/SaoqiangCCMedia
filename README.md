@@ -1,6 +1,8 @@
-# 控制中心视频模块 3.1415926
+# 控制中心视频模块 3.1415926-2 构建兼容修复
 
-面向 iOS 16.5 RootHide。依赖 RootHide 可用的 CCSupport 与 PreferenceLoader。保持包名 `com.saoqiang.ccmedia`，可从 5.2.0 升级；旧配置归到模块 1。
+原作 Saoqiang，构建兼容修复维护 Xiaofei。原功能源码与资源不改，修复范围和验证分层见 [docs/repair.md](docs/repair.md)。
+
+面向 iOS 16.5 RootHide。依赖 RootHide、CCSupport 与 PreferenceLoader。保持包名 `com.saoqiang.ccmedia`，从本次故障包 `3.1415926-1` 升级；旧配置归到模块 1。上游说明曾写“可从 5.2.0 升级”，但 Debian 版本排序不支持该说法，本修订不作此承诺。
 
 ## 使用
 
@@ -14,6 +16,8 @@
 
 ## 构建
 
-工程包含六模块、一个偏好设置 bundle、资源和 Debian 包描述。Linux 原生构建入口 `python3 scripts/build-native.py`；用 `--help` 查看分阶段构建参数。外部依赖：支持现代 arm64e ABI 的 Clang/Apple ld64、iPhoneOS SDK、Theos 私有框架头、RootHide 头及链接存根、ldid、dpkg-deb。不内附外部工具链。当前构建用 SDK 目录名为 16.5，SDK 自报版本为 16.4，最低部署目标为 iOS 15.0。
+工程包含六个模块、一个偏好设置 bundle。公开仓库 Actions 使用 `toolchain-lock.json` 固定的 RootHide Theos/SDK 与兼容范围内 Apple Xcode 16.4；入口为 `sh build.sh roothide`。原自定义 Linux 分阶段编译入口已停用并归档，不能再用它发布此修复。
+
+本地预检：`python3 scripts/toolchain.py static && python3 tests/run_tests.py -v`。macOS 构建先按锁准备工具，再运行 `python3 scripts/toolchain.py select-xcode`、`prepare`、`verify`。实际 deb 必须通过七个 arm64e bundle 的 CFString ISA PAC、代码页签名、依赖、资源和版本门禁。最低 iOS15，SDK目录16.5/实际metadata16.4。UIKit测试运行的是生产面板源码与测试专用Preferences替身，不代替目标设备PAC/私有框架验收。Actions仅上传artifact，不自动建tag/Release。
 
 视频处理通过导入时保留文件容器和临时文件有效期，以及在进程内读取 RootHide 文件向 AVFoundation 提供数据来处理可能的路径/权限兼容问题。视频导入与播放、系统列表排布、生命周期均需在目标真机复测；本地构建不能代替这些测试。
