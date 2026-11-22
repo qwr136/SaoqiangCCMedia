@@ -204,7 +204,7 @@ static BOOL SQCCMTestNear(double actual, double expected) {
         [self check:[two[@"customName"] isEqual:@"Panel Two"] message:@"module 2 custom name did not persist"];
         [self check:one[@"customName"] == nil message:@"module 2 name leaked into module 1"];
         [self check:[diskRead[@"schemaVersion"] isEqual:@2] message:@"schema version not upgraded on write"];
-        id reloaded = [[NSClassFromString(@"SQCCMModulePreferences2") alloc] initWithStyle:UITableViewStyleInsetGrouped];
+        PSListController *reloaded = [[NSClassFromString(@"SQCCMModulePreferences2") alloc] initWithStyle:UITableViewStyleInsetGrouped];
         [reloaded loadViewIfNeeded];
         [self check:[reloaded.title isEqual:@"Panel Two"] message:@"saved title not restored on controller re-entry"];
         [self check:SQCCMTestNear([[reloaded readPreferenceValue:SQCCMTestSpecifier(reloaded, @"opacity")] doubleValue], 0.7) message:@"disk value not read by fresh controller"];
@@ -279,7 +279,7 @@ static BOOL SQCCMTestNear(double actual, double expected) {
     [self runCase:@"reversible-panel-exit-and-reentry" body:^{
         UINavigationController *navigation = self.appDelegate.navigationController;
         Class moduleClass = NSClassFromString(@"SQCCMModulePreferences6");
-        id before = [[moduleClass alloc] initWithStyle:UITableViewStyleInsetGrouped];
+        PSListController *before = [[moduleClass alloc] initWithStyle:UITableViewStyleInsetGrouped];
         [self setValue:@0.51 key:@"opacity" on:before];
         [navigation pushViewController:before animated:NO];
         [before loadViewIfNeeded];

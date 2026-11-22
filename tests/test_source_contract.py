@@ -21,6 +21,18 @@ class SQCCMSourceTests(unittest.TestCase):
         for path in paths:ast.parse(path.read_text(),filename=str(path))
     def test_toolchain_static(self):
         tool=load('sqccm_toolchain',P/'scripts/toolchain.py');self.assertEqual(tool.static_errors(P),[])
+    def test_actions_path_priority_matches_current_process(self):
+        tool=load('sqccm_path_toolchain',P/'scripts/toolchain.py')
+        import os
+        with tempfile.TemporaryDirectory() as tmp:
+            target=Path(tmp)/'github-path'
+            paths=['/verified/make','/verified/dpkg','/theos/bin']
+            with patch.dict(os.environ,{'PATH':'/usr/bin','GITHUB_PATH':str(target)}):
+                tool.activate_paths(paths)
+                self.assertEqual(os.environ['PATH'].split(':')[:3],paths)
+                actions=[]
+                for line in target.read_text().splitlines():actions.insert(0,line)
+                self.assertEqual(actions,paths)
     def test_package_version_identity_and_dependencies(self):
         control=dict(x.split(': ',1) for x in (P/'control').read_text().splitlines() if ': ' in x)
         self.assertEqual(control['Package'],'com.saoqiang.ccmedia');self.assertEqual(control['Version'],'3.1415926-2')

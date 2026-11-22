@@ -393,6 +393,16 @@ def locations():
     return root, Path(os.environ.get('THEOS', str(root/'theos'))), root/'sdks'
 
 
+def activate_paths(paths):
+    """Keep verified tools first both now and after Actions prepends each line."""
+    paths = [str(path) for path in paths]
+    if os.environ.get('GITHUB_PATH'):
+        with open(os.environ['GITHUB_PATH'], 'a') as stream:
+            for path in reversed(paths):
+                stream.write(path+'\n')
+    os.environ['PATH'] = os.pathsep.join(paths + [os.environ.get('PATH', '')])
+
+
 def prepare(project, lock):
     verify_platform(lock)
     root, theos, sdk_source = locations()
@@ -411,13 +421,7 @@ def prepare(project, lock):
     # Source/SDK remain immutable; packaging follows the selected bounded policy.
     install_packaging(lock, root/'downloads')
     package_bins = packaging_bin_paths(lock)
-    if os.environ.get('GITHUB_PATH'):
-        with open(os.environ['GITHUB_PATH'], 'a') as stream:
-            for path in package_bins:
-                stream.write(str(path)+'\n')
-            stream.write(str(theos/'bin')+'\n')
-    os.environ['PATH'] = os.pathsep.join([str(path) for path in package_bins] +
-                                       [str(theos/'bin'), os.environ.get('PATH','')])
+    activate_paths(package_bins + [theos/'bin'])
     print('Prepared exact Theos/SDK and packaging tools')
 
 
