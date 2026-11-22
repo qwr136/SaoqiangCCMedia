@@ -21,6 +21,11 @@ def archive(deb,control=False):
             files[name]=tf.extractfile(item).read();modes[name]=item.mode
     return files,modes
 
+def require_strong_roothide(dependencies):
+    target='@loader_path/.jbroot/usr/lib/libroothide.dylib'
+    require([cmd for cmd,name in dependencies if name==target]==[0xc],
+            'Missing unique strong RootHide dependency')
+
 def verify(deb,project,version):
     control,_=archive(deb,True);require(set(control)=={'control'},'Unexpected maintainer scripts/control members')
     fields=dict(line.split(': ',1) for line in control['control'].decode().splitlines() if ': ' in line)
@@ -47,16 +52,16 @@ def verify(deb,project,version):
         binaries.append({'path':path,'sha256':sha(data[path]),'size':len(data[path]),'macho':binary})
         # inspect_macho proves CFString PAC/signature; independently inspect platform/dependencies.
         import struct
-        raw=data[path];ncmds=struct.unpack_from('<I',raw,16)[0];off=32;deps=[];build=[]
+        raw=data[path];ncmds=struct.unpack_from('<I',raw,16)[0];off=32;deps=[];dep_commands=[];build=[]
         require(struct.unpack_from('<I',raw,12)[0]==8,'Expected MH_BUNDLE')
         for _ in range(ncmds):
             cmd,size=struct.unpack_from('<II',raw,off)
             if cmd in (0xc,0x80000018,0x8000001f,0x80000023):
-                start=struct.unpack_from('<I',raw,off+8)[0];dep=raw[off+start:off+size].split(b'\0')[0].decode();deps.append(dep)
+                start=struct.unpack_from('<I',raw,off+8)[0];dep=raw[off+start:off+size].split(b'\0')[0].decode();deps.append(dep);dep_commands.append((cmd,dep))
             if cmd==0x32:build.append(struct.unpack_from('<III',raw,off+8))
             off+=size
         require(build==[(2,0x0f0000,0x100400)],'Expected iOS min15/SDK16.4: '+name)
-        require('@loader_path/.jbroot/usr/lib/libroothide.dylib' in deps,'Missing strong RootHide dependency: '+name)
+        require_strong_roothide(dep_commands)
         require('/usr/lib/libSystem.B.dylib' in deps,'Missing libSystem')
         for dep in deps:require(dep.startswith(('/System/Library/','/usr/lib/','@loader_path/.jbroot/usr/lib/')) and '/var/jb/' not in dep,'Unresolved dependency '+dep)
     for name,src in resources.items():

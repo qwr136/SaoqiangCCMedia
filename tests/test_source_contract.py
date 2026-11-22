@@ -6,11 +6,15 @@ def load(name,path):
     s=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);return m
 class SQCCMSourceTests(unittest.TestCase):
     def test_production_behavior_and_resources_frozen(self):
-        receipt=json.loads((P/'docs/upstream-source.json').read_text());checked=0
-        for name,item in receipt['files'].items():
-            if name.endswith(('.m','.h','.plist','.png')):
-                self.assertEqual(hashlib.sha256((P/name).read_bytes()).hexdigest(),item['sha256'],name);checked+=1
-        self.assertEqual(checked,19)
+        raw=(P/'docs/upstream-source.json').read_bytes()
+        self.assertEqual(hashlib.sha256(raw).hexdigest(),'dcaea682d9bf10672ab8ee1c0f0ae256dac8bf3773dd5f07ec5f01bd0d7cf589')
+        receipt=json.loads(raw)
+        protected={name:item for name,item in receipt['files'].items() if name.endswith(('.m','.h','.plist','.png'))}
+        actual={str(f.relative_to(P)) for base in ('Module','Preferences','Shared','layout') for f in (P/base).rglob('*') if f.is_file() and f.name!='Makefile'}
+        self.assertEqual(actual,set(protected))
+        for name,item in protected.items():
+            self.assertEqual(hashlib.sha256((P/name).read_bytes()).hexdigest(),item['sha256'],name)
+        self.assertEqual(len(protected),19)
     def test_old_builder_archived_and_unreachable(self):
         rec=json.loads((P/'docs/upstream-source.json').read_text())
         self.assertEqual(hashlib.sha256((P/'docs/legacy-build-native.py.txt').read_bytes()).hexdigest(),rec['files']['scripts/build-native.py']['sha256'])

@@ -70,6 +70,14 @@ jobs:
         run: |
           set -euo pipefail
           sh build.sh roothide 2>&1 | tee reports/build.log
+      - name: Preserve unaccepted package for diagnosis only
+        if: failure()
+        run: |
+          mkdir -p reports/unaccepted-packages
+          for package in packages/*.deb; do
+            [ -f "$package" ] || continue
+            cp "$package" reports/unaccepted-packages/
+          done
       - name: Run actual production panel source with UIKit test host
         run: python3 tests/ui/run_panel_tests.py --output reports/uikit
       - name: Bind package to this source and run
